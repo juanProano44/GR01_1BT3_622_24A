@@ -7,10 +7,6 @@
 <body>
 <h2>Tutorías Disponibles</h2>
 
-<!-- Botón para refrescar la tabla -->
-<form action="${pageContext.request.contextPath}/SolicitudTutoriaServlet" method="get">
-  <button type="submit">Refrescar Tutorías</button>
-</form>
 
 <!-- Tabla para mostrar las tutorías -->
 <table border="1">
