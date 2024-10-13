@@ -31,7 +31,7 @@ public class CambiarEstadoSolicitudServlet extends HttpServlet {
         if (solicitud != null) {
             // Cambiar el estado de la solicitud
             solicitud.setEstado(nuevoEstado);
-            solicitudDAO.update(solicitud);
+            solicitudDAO.responderSolicitud(solicitud);
         }
 
         // Redirigir de vuelta a la página de tutorías creadas

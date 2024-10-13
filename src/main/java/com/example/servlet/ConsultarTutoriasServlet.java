@@ -3,7 +3,6 @@ package com.example.servlet;
 import com.example.dao.TutoriaDAO;
 import com.example.model.Tutoria;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +26,7 @@ public class ConsultarTutoriasServlet extends HttpServlet {
         int alumnoId = 1; // Asumimos que el alumno tiene el ID 1
 
         // Obtener las tutorías disponibles que el alumno no ha aceptado todavía
-        List<Tutoria> tutoriasDisponibles = tutoriaDAO.getTutoriasNoAceptadasPorAlumno(alumnoId);
+        List<Tutoria> tutoriasDisponibles = tutoriaDAO.buscarTutoriasDisponibles(alumnoId);
 
         request.setAttribute("tutorias", tutoriasDisponibles);
         request.getRequestDispatcher("/User/tutoriasDisponibles.jsp").forward(request, response);

@@ -49,7 +49,7 @@ public class RegistrarTutoriaServlet extends HttpServlet {
         tutoria.setTutor(tutor);
 
         // Guardar la tutoría
-        tutoriaDAO.saveTutoria(tutoria);
+        tutoriaDAO.reguistarTutoria(tutoria);
 
         // Redirigir
         response.sendRedirect(request.getContextPath() + "/Tutor/tutor.jsp");

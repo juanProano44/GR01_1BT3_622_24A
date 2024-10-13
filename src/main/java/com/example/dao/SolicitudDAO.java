@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SolicitudDAO {
 
-    public void saveSolicitud(Solicitud solicitud) {
+    public void solicitarTutoria(Solicitud solicitud) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -118,7 +118,7 @@ public class SolicitudDAO {
     }
 
     // Método para actualizar una solicitud
-    public void update(Solicitud solicitud) {
+    public void responderSolicitud(Solicitud solicitud) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();

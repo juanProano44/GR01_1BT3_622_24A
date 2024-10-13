@@ -18,7 +18,7 @@ public class TutoriaDAO {
     }
 
     // Obtener las tutorías no aceptadas por un alumno específico
-    public List<Tutoria> getTutoriasNoAceptadasPorAlumno(int alumnoId) {
+    public List<Tutoria> buscarTutoriasDisponibles(int alumnoId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Tutoria> query = session.createQuery(
                     "FROM Tutoria t WHERE t.id NOT IN (SELECT s.tutoria.id FROM Solicitud s WHERE s.alumno.id = :alumnoId)",
@@ -36,7 +36,7 @@ public class TutoriaDAO {
     }
 
     // Guardar o actualizar una tutoría
-    public void saveTutoria(Tutoria tutoria) {
+    public void reguistarTutoria(Tutoria tutoria) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
@@ -76,7 +76,7 @@ public class TutoriaDAO {
     }
 
     // Obtener las tutorías por el ID del tutor
-    public List<Tutoria> getTutoriasByTutorId(int tutorId) {
+    public List<Tutoria> listarSolicitudesPendientes(int tutorId) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM Tutoria t WHERE t.tutor.id = :tutorId", Tutoria.class)
                     .setParameter("tutorId", tutorId)

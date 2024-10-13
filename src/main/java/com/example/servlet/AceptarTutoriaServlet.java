@@ -55,7 +55,7 @@ public class AceptarTutoriaServlet extends HttpServlet {
         System.out.println("Estado: " + solicitud.getEstado());
 
         // Guardar la solicitud en la base de datos
-        solicitudDAO.saveSolicitud(solicitud);
+        solicitudDAO.solicitarTutoria(solicitud);
 
         // Redirigir al servlet que consulta las tutorías disponibles
         response.sendRedirect(request.getContextPath() + "/User/consultarTutorias");

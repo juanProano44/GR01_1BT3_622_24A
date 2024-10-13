@@ -31,7 +31,7 @@ public class VerTutoriasServlet extends HttpServlet {
         int tutorId = 1; // Valor quemado para pruebas
 
         // Obtener todas las tutorías creadas por el tutor
-        List<Tutoria> tutorias = tutoriaDAO.getTutoriasByTutorId(tutorId);
+        List<Tutoria> tutorias = tutoriaDAO.listarSolicitudesPendientes(tutorId);
 
         // Obtener todas las solicitudes para las tutorías del tutor
         List<Solicitud> solicitudes = solicitudDAO.getSolicitudesPorTutor(tutorId);
