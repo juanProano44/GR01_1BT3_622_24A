@@ -22,25 +22,17 @@ public class ConsultarTutoriasServlet extends HttpServlet {
     }
 
     @Override
+    // Lógica en el Servlet que muestra las tutorías disponibles (ConsultarTutoriasServlet)
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Obtener el ID del alumno (quemado para pruebas, debería obtenerse de la sesión)
-        int alumnoId = 1; // Aquí puedes obtener el ID del alumno de la sesión en un entorno de producción
+        int alumnoId = 1; // Asumimos que el alumno tiene el ID 1
 
-        // Obtener todas las tutorías disponibles que el alumno no ha aceptado
-        List<Tutoria> tutorias = tutoriaDAO.getTutoriasDisponiblesParaAlumno(alumnoId);
+        // Obtener las tutorías disponibles que el alumno no ha aceptado todavía
+        List<Tutoria> tutoriasDisponibles = tutoriaDAO.getTutoriasNoAceptadasPorAlumno(alumnoId);
 
-        // Verificar que la lista de tutorías no esté vacía
-        System.out.println("Tutorías disponibles para el alumno: " + tutorias.size());
-        for (Tutoria tutoria : tutorias) {
-            System.out.println("id: " + tutoria.getId() + " Fecha: " + tutoria.getFecha() + " - Materia: " + tutoria.getMateria());
-        }
-
-        // Pasar la lista de tutorías a la vista (JSP)
-        request.setAttribute("tutorias", tutorias);
-
-        // Redirigir a la página JSP que muestra las tutorías disponibles
+        request.setAttribute("tutorias", tutoriasDisponibles);
         request.getRequestDispatcher("/User/tutoriasDisponibles.jsp").forward(request, response);
     }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

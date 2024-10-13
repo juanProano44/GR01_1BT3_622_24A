@@ -6,7 +6,8 @@
 <body>
 <h2>Bienvenido, Tutor</h2>
 <p>Desde aquí puedes registrar nuevas tutorías o responder solicitudes.</p>
-<a href="registrarTutoria.jsp">Registrar Tutoría</a><br>
+<a href="${pageContext.request.contextPath}/RegistrarTutoriaServlet">Registrar nueva Tutoría</a>
+
 <a href="${pageContext.request.contextPath}/VerTutoriasServlet">Ver Tutorías Creadas</a>
 
 </body>

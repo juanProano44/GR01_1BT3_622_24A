@@ -7,7 +7,8 @@
 <h2>Bienvenido, Usuario</h2>
 <p>Desde aquí puedes consultar las tutorías disponibles o solicitar una tutoría.</p>
 <a href="consultarTutorias">Consultar Tutorías Disponibles</a><br>
-<a href="${pageContext.request.contextPath}/VerTutoriasAceptadasServlet">Ver Tutorías Aceptadas</a>
+<a href="${pageContext.request.contextPath}/VerSolicitudesServlet">Ver Solicitudes de Tutoría</a>
+
 
 </body>
 </html>

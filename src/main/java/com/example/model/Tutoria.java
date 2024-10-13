@@ -1,6 +1,7 @@
 package com.example.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "tutoria")
@@ -10,16 +11,25 @@ public class Tutoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String materia;
-    private String fecha;
+    @Column(name = "fecha")
+    private Date fecha;
+
+    @Column(name = "hora_inicio")
+    private String horaInicio;
+
+    @Column(name = "hora_fin")
+    private String horaFin;
 
     @ManyToOne
     @JoinColumn(name = "tutor_id")
     private Tutor tutor;
 
-    private String estado;  // Nueva propiedad estado
+    @ManyToOne
+    @JoinColumn(name = "codigomateria")
+    private Materia materia;
 
-    // Getters y setters
+    // Getters and Setters
+
     public int getId() {
         return id;
     }
@@ -28,20 +38,28 @@ public class Tutoria {
         this.id = id;
     }
 
-    public String getMateria() {
-        return materia;
-    }
-
-    public void setMateria(String materia) {
-        this.materia = materia;
-    }
-
-    public String getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    public String getHoraInicio() {
+        return horaInicio;
+    }
+
+    public void setHoraInicio(String horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public String getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraFin(String horaFin) {
+        this.horaFin = horaFin;
     }
 
     public Tutor getTutor() {
@@ -52,11 +70,11 @@ public class Tutoria {
         this.tutor = tutor;
     }
 
-    public String getEstado() {
-        return estado;
+    public Materia getMateria() {
+        return materia;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setMateria(Materia materia) {
+        this.materia = materia;
     }
 }

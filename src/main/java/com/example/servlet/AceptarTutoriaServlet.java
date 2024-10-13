@@ -1,9 +1,9 @@
 package com.example.servlet;
 
-import com.example.dao.SolicitudTutoriaDAO;
-import com.example.dao.TutoriaDAO;
+import com.example.dao.SolicitudDAO;
 import com.example.model.Alumno;
-import com.example.model.SolicitudTutoria;
+import com.example.model.Solicitud;
+import com.example.model.Tutor;
 import com.example.model.Tutoria;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,49 +16,49 @@ import java.io.IOException;
 @WebServlet("/AceptarTutoriaServlet")
 public class AceptarTutoriaServlet extends HttpServlet {
 
-    private SolicitudTutoriaDAO solicitudTutoriaDAO;
-    private TutoriaDAO tutoriaDAO;  // DAO para manipular las tutorías
+    private SolicitudDAO solicitudDAO;
 
     @Override
     public void init() {
-        solicitudTutoriaDAO = new SolicitudTutoriaDAO();
-        tutoriaDAO = new TutoriaDAO();  // Inicializar el DAO para las tutorías
+        solicitudDAO = new SolicitudDAO(); // Inicializar DAO
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int tutoriaId = Integer.parseInt(request.getParameter("tutoriaId"));
 
-        // Asignar un valor quemado para el ID del alumno (temporalmente)
-        int alumnoId = 1; // Valor quemado para pruebas, asume que el alumno con ID 1 existe en la tabla alumno
+        // Cargar el alumno y tutor de forma apropiada
+        int alumnoId = 1; // Valor quemado para pruebas, asume que el alumno con ID 1 existe
+        int tutorId = 1;  // Valor quemado para pruebas, asume que el tutor con ID 1 existe
 
-        // Crear un objeto Alumno con el ID quemado
+        // Crear los objetos de entidad correspondientes
         Alumno alumno = new Alumno();
-        alumno.setId(alumnoId);  // Valor quemado
+        alumno.setId(alumnoId);
 
-        // Obtener la tutoría correspondiente desde la base de datos
-        Tutoria tutoria = tutoriaDAO.getById(tutoriaId);
-        if (tutoria == null) {
-            // Si no se encuentra la tutoría, redirigir o manejar el error
-            response.sendRedirect(request.getContextPath() + "/error.jsp");
-            return;
-        }
+        Tutor tutor = new Tutor();
+        tutor.setId(tutorId);
+
+        Tutoria tutoria = new Tutoria();
+        tutoria.setId(tutoriaId);
 
         // Crear la solicitud de tutoría
-        SolicitudTutoria solicitud = new SolicitudTutoria();
-        solicitud.setAlumno(alumno);
-        solicitud.setTutoria(tutoria);
-        solicitud.setEstado("Aceptada");
+        Solicitud solicitud = new Solicitud();
+        solicitud.setTutoria(tutoria);  // Asociar la tutoría
+        solicitud.setAlumno(alumno);    // Asociar el alumno
+        solicitud.setTutor(tutor);      // Asociar el tutor
+        solicitud.setEstado("Pendiente");  // Estado inicial
 
-        // Guardar la solicitud de tutoría
-        solicitudTutoriaDAO.guardarSolicitud(solicitud);
+        // Debug: Verificación de los datos en la consola
+        System.out.println("Tutoria ID: " + solicitud.getTutoria().getId());
+        System.out.println("Alumno ID: " + solicitud.getAlumno().getId());
+        System.out.println("Tutor ID: " + solicitud.getTutor().getId());
+        System.out.println("Estado: " + solicitud.getEstado());
 
-        // Actualizar el estado de la tutoría a "Aceptada"
-        tutoria.setEstado("Aceptada");
-        tutoriaDAO.update(tutoria);  // Método para actualizar la tutoría en la base de datos
+        // Guardar la solicitud en la base de datos
+        solicitudDAO.saveSolicitud(solicitud);
 
-        // Redirigir a la página de tutorías disponibles
+        // Redirigir al servlet que consulta las tutorías disponibles
         response.sendRedirect(request.getContextPath() + "/User/consultarTutorias");
-    }
 
+    }
 }

@@ -1,31 +1,35 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Tutorías Aceptadas</title>
+  <title>Solicitudes de Tutoría</title>
 </head>
 <body>
-<h2>Tutorías Aceptadas</h2>
+<h2>Solicitudes de Tutoría</h2>
+
+<!-- Tabla para mostrar las solicitudes -->
 <table border="1">
-  <thead>
   <tr>
-    <th>ID Tutoría</th>
+    <th>ID Solicitud</th>
     <th>Materia</th>
     <th>Fecha</th>
-    <th>Estado</th>
+    <th>Hora Inicio</th>
+    <th>Hora Fin</th>
+    <th>Tutor</th> <!-- Mostrar el nombre del tutor -->
+    <th>Estado</th> <!-- Mostrar el estado (Pendiente, Aceptada, etc.) -->
   </tr>
-  </thead>
-  <tbody>
-  <c:forEach var="solicitud" items="${tutoriasAceptadas}">
+  <c:forEach var="solicitud" items="${solicitudes}">
     <tr>
-      <td>${solicitud.tutoria.id}</td>
-      <td>${solicitud.tutoria.materia}</td>
+      <td>${solicitud.id}</td>
+      <td>${solicitud.tutoria.materia.nombre}</td>
       <td>${solicitud.tutoria.fecha}</td>
-      <td>${solicitud.estado}</td>
+      <td>${solicitud.tutoria.horaInicio}</td>
+      <td>${solicitud.tutoria.horaFin}</td>
+      <td>${solicitud.tutor.nombre}</td>
+      <td>${solicitud.estado}</td> <!-- Mostrar el estado de la solicitud -->
     </tr>
   </c:forEach>
-  </tbody>
 </table>
+
 </body>
 </html>

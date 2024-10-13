@@ -1,7 +1,9 @@
 package com.example.servlet;
 
 import com.example.dao.TutoriaDAO;
+import com.example.dao.SolicitudDAO;
 import com.example.model.Tutoria;
+import com.example.model.Solicitud;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,24 +17,30 @@ import java.util.List;
 public class VerTutoriasServlet extends HttpServlet {
 
     private TutoriaDAO tutoriaDAO;
+    private SolicitudDAO solicitudDAO;
 
     @Override
     public void init() {
-        tutoriaDAO = new TutoriaDAO(); // Inicializar el DAO que maneja las tutorías
+        tutoriaDAO = new TutoriaDAO(); // Inicializar DAO de tutorías
+        solicitudDAO = new SolicitudDAO(); // Inicializar DAO de solicitudes
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Aquí debes obtener el ID del tutor logueado
-        int tutorId = 1; // Temporal, cambiar por el ID real del tutor logueado
+        // Obtener el ID del tutor (puedes obtenerlo de la sesión, aquí usamos uno quemado para pruebas)
+        int tutorId = 1; // Valor quemado para pruebas
 
         // Obtener todas las tutorías creadas por el tutor
         List<Tutoria> tutorias = tutoriaDAO.getTutoriasByTutorId(tutorId);
 
-        // Pasar la lista de tutorías a la vista (JSP)
-        request.setAttribute("tutorias", tutorias);
+        // Obtener todas las solicitudes para las tutorías del tutor
+        List<Solicitud> solicitudes = solicitudDAO.getSolicitudesPorTutor(tutorId);
 
-        // Redirigir a la página JSP que muestra las tutorías creadas por el tutor
+        // Pasar las listas a la vista (JSP)
+        request.setAttribute("tutorias", tutorias);
+        request.setAttribute("solicitudes", solicitudes);
+
+        // Redirigir a la página JSP que muestra las tutorías creadas y las solicitudes
         request.getRequestDispatcher("/Tutor/verTutorias.jsp").forward(request, response);
     }
 }

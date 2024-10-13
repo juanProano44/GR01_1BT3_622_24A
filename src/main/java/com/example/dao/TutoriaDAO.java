@@ -3,21 +3,42 @@ package com.example.dao;
 import com.example.model.Tutoria;
 import com.example.utils.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query; // Importar la clase Query de Hibernate
 
 import java.util.List;
 
 public class TutoriaDAO {
 
+    private SessionFactory sessionFactory;
+
+    public TutoriaDAO() {
+        this.sessionFactory = HibernateUtil.getSessionFactory(); // Inicializa sessionFactory en el constructor
+    }
+
+    // Obtener las tutorías no aceptadas por un alumno específico
+    public List<Tutoria> getTutoriasNoAceptadasPorAlumno(int alumnoId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Tutoria> query = session.createQuery(
+                    "FROM Tutoria t WHERE t.id NOT IN (SELECT s.tutoria.id FROM Solicitud s WHERE s.alumno.id = :alumnoId)",
+                    Tutoria.class);
+            query.setParameter("alumnoId", alumnoId);
+            return query.getResultList();
+        }
+    }
+
+    // Obtener todas las tutorías
     public List<Tutoria> getAllTutorias() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             return session.createQuery("from Tutoria", Tutoria.class).list();
         }
     }
 
+    // Guardar o actualizar una tutoría
     public void saveTutoria(Tutoria tutoria) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.saveOrUpdate(tutoria);
             transaction.commit();
@@ -29,9 +50,10 @@ public class TutoriaDAO {
         }
     }
 
+    // Eliminar una tutoría por su ID
     public void deleteTutoria(int tutoriaId) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             Tutoria tutoria = session.get(Tutoria.class, tutoriaId);
             if (tutoria != null) {
@@ -45,74 +67,54 @@ public class TutoriaDAO {
             e.printStackTrace();
         }
     }
+
+    // Obtener una tutoría por su ID
     public Tutoria getTutoriaById(int tutoriaId) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Tutoria.class, tutoriaId); // Obtiene la tutoría por su ID
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Tutoria.class, tutoriaId);
         }
     }
 
+    // Obtener las tutorías por el ID del tutor
     public List<Tutoria> getTutoriasByTutorId(int tutorId) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM Tutoria t WHERE t.tutor.id = :tutorId", Tutoria.class)
                     .setParameter("tutorId", tutorId)
                     .list();
         }
     }
+
+    // Actualizar una tutoría
     public void update(Tutoria tutoria) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
             session.update(tutoria);
-            session.getTransaction().commit();
+            transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
         }
     }
 
-    // Método para obtener una tutoría por su ID
+    // Obtener una tutoría por su ID (otro método similar al anterior)
     public Tutoria getById(int id) {
-        Transaction transaction = null;
-        Tutoria tutoria = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            // Obtener la tutoría por su ID
-            tutoria = session.get(Tutoria.class, id);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Tutoria.class, id);
         }
-        return tutoria;
     }
 
-    // Método para obtener las tutorías disponibles, excluyendo las ya aceptadas por el alumno
+    // Obtener las tutorías disponibles para un alumno (tutorías no aceptadas)
     public List<Tutoria> getTutoriasDisponiblesParaAlumno(int alumnoId) {
-        Transaction transaction = null;
-        List<Tutoria> tutorias = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            // Consulta para obtener las tutorías que no han sido aceptadas por el alumno
+        try (Session session = sessionFactory.openSession()) {
             String hql = "FROM Tutoria t WHERE t.id NOT IN " +
-                    "(SELECT s.tutoria.id FROM SolicitudTutoria s WHERE s.alumno.id = :alumnoId AND s.estado = 'Aceptada')";
+                    "(SELECT s.tutoria.id FROM Solicitud s WHERE s.alumno.id = :alumnoId AND s.estado = 'Aceptada')";
 
-            tutorias = session.createQuery(hql, Tutoria.class)
-                    .setParameter("alumnoId", alumnoId)
-                    .list();
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            Query<Tutoria> query = session.createQuery(hql, Tutoria.class)
+                    .setParameter("alumnoId", alumnoId);
+            return query.getResultList();
         }
-        return tutorias;
     }
-
-
-
 }

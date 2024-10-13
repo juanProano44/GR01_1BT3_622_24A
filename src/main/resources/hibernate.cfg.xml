@@ -30,6 +30,9 @@
         <mapping class="com.example.model.Tutor"/>
         <mapping class="com.example.model.Alumno"/>
         <mapping class="com.example.model.SolicitudTutoria"/>
+        <mapping class="com.example.model.Materia"/>
+        <mapping class="com.example.model.Solicitud"/>
+
 
 
     </session-factory>
