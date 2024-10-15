@@ -36,6 +36,7 @@ public class MateriaDAO {
         return null;
     }
 
+    //Método para consultar Materias
     private static void consultarMaterias(Session session) {
         List<Materia> result = session.createQuery("from Materia", Materia.class).getResultList();
     }
