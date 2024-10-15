@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TutoriaDAO {
 
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     public TutoriaDAO() {
         this.sessionFactory = HibernateUtil.getSessionFactory(); // Inicializa sessionFactory en el constructor
