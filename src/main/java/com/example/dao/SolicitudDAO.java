@@ -12,12 +12,9 @@ public class SolicitudDAO {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             // Guardar la solicitud
             session.save(solicitud);
-            System.out.println("Solicitud guardada correctamente: " + solicitud.getId());
-
-
+            desplegarConfirmacion(solicitud);
             // Confirmar la transacción
             transaction.commit();
         } catch (Exception e) {
@@ -26,6 +23,10 @@ public class SolicitudDAO {
             }
             e.printStackTrace();
         }
+    }
+
+    private void desplegarConfirmacion(Solicitud solicitud) {
+        System.out.println("Solicitud guardada correctamente: " + solicitud.getId());
     }
 
     // Método para obtener las tutorías aceptadas por un alumno
@@ -41,7 +42,6 @@ public class SolicitudDAO {
             tutoriasAceptadas = session.createQuery(hql, Solicitud.class)
                     .setParameter("alumnoId", alumnoId)
                     .list();
-
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -49,7 +49,6 @@ public class SolicitudDAO {
             }
             e.printStackTrace();
         }
-
         return tutoriasAceptadas;
     }
     // Método para obtener todas las solicitudes de un alumno, sin importar el estado
