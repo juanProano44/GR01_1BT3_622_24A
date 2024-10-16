@@ -36,11 +36,25 @@ public class TutoriaDAO {
     }
 
     // Guardar o actualizar una tutoría
-    public void reguistarTutoria(Tutoria tutoria) {
+    public void registarTutoria(Tutoria tutoria) {
+        executeTransaction(session -> session.saveOrUpdate(tutoria));
+    }
+
+    // Eliminar una tutoría por su ID
+    public void deleteTutoria(int tutoriaId) {
+        executeTransaction(session -> {
+            Tutoria tutoria = session.get(Tutoria.class, tutoriaId);
+            if (tutoria != null) {
+                session.delete(tutoria);
+            }
+        });
+    }
+
+    private void executeTransaction(TransactionConsumer consumer) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.saveOrUpdate(tutoria);
+            consumer.accept(session);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -50,22 +64,9 @@ public class TutoriaDAO {
         }
     }
 
-    // Eliminar una tutoría por su ID
-    public void deleteTutoria(int tutoriaId) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            Tutoria tutoria = session.get(Tutoria.class, tutoriaId);
-            if (tutoria != null) {
-                session.delete(tutoria);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
+    @FunctionalInterface
+    private interface TransactionConsumer {
+        void accept(Session session);
     }
 
     // Obtener una tutoría por su ID
@@ -101,9 +102,7 @@ public class TutoriaDAO {
 
     // Obtener una tutoría por su ID (otro método similar al anterior)
     public Tutoria getById(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(Tutoria.class, id);
-        }
+        return getTutoriaById(id);
     }
 
     // Obtener las tutorías disponibles para un alumno (tutorías no aceptadas)
