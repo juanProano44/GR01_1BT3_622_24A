@@ -99,12 +99,7 @@ public class TutoriaDAO {
         }
     }
 
-    // Obtener una tutoría por su ID (otro método similar al anterior)
-    public Tutoria getById(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(Tutoria.class, id);
-        }
-    }
+
 
     // Obtener las tutorías disponibles para un alumno (tutorías no aceptadas)
     public List<Tutoria> getTutoriasDisponiblesParaAlumno(int alumnoId) {
